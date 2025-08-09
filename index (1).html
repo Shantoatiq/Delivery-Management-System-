@@ -1,0 +1,175 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Management - দূরদান্ত</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        font-family: 'Segoe UI', sans-serif;
+    }
+    .floating-whatsapp {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+    }
+    .floating-whatsapp:hover {
+        transform: scale(1.1);
+    }
+    .success-message {
+        display: none;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+</style>
+</head>
+<body class="p-4">
+
+<div class="text-center mb-6">
+    <h1 class="text-4xl font-bold text-white animate-bounce">🚚 দূরদান্ত ডেলিভারি</h1>
+    <p class="text-white">আপনার ডেলিভারি ম্যানেজমেন্ট এখন হাতের মুঠোয়</p>
+</div>
+
+<form id="deliveryForm" class="bg-white p-6 rounded-xl shadow-lg space-y-4 max-w-2xl mx-auto">
+
+    <!-- Section 1: Merchant Info -->
+    <h2 class="text-xl font-semibold text-gray-700">Merchant Information</h2>
+    <input type="text" placeholder="উদ্যোগের নাম/প্রতিষ্ঠানের নাম" class="form-control" required>
+    <input type="text" placeholder="ঠিকানা" class="form-control" required>
+    <input type="tel" placeholder="যোগাযোগ নম্বর" class="form-control" required>
+
+    <!-- Product Details -->
+<h2 class="text-xl font-semibold text-gray-700">Product Details</h2>
+<input type="text" placeholder="পণ্যের নাম" class="form-control" required>
+<input type="number" placeholder="মূল্য" class="form-control" required>
+<input type="number" placeholder="ডেলিভারি চার্জ" class="form-control" required>
+<input type="number" placeholder="পরিমাণ" class="form-control" required>
+<input type="text" placeholder="ওজন" class="form-control" required>
+
+<!-- Packaging Type Select -->
+<label class="block mt-2 mb-1 text-gray-600">প্যাকেজিং ধরণ</label>
+<select class="form-control" required>
+    <option value="">-- প্যাকেজিং নির্বাচন করুন --</option>
+    <option value="কার্টন বক্স">কার্টন বক্স</option>
+    <option value="প্লাস্টিক র‍্যাপ">প্লাস্টিক র‍্যাপ</option>
+    <option value="কাগজের ব্যাগ">কাগজের ব্যাগ</option>
+    <option value="ফয়েল প্যাক">ফয়েল প্যাক</option>
+    <option value="অন্যান্য">অন্যান্য</option>
+</select>
+
+    <!-- Pickup Address & Time -->
+    <h2 class="text-xl font-semibold text-gray-700">Pickup Address & Time</h2>
+    <input type="text" placeholder="পণ্য সংগ্রহের সঠিক ঠিকানা" class="form-control" required>
+    <input type="datetime-local" class="form-control" required>
+
+    <!-- Section 2: Customer Info -->
+    <h2 class="text-xl font-semibold text-gray-700">Delivery Address & Customer Contact</h2>
+    <input type="text" placeholder="কাস্টমারের নাম" class="form-control" required>
+    <input type="tel" placeholder="মোবাইল নম্বর" class="form-control" required>
+    <textarea placeholder="ডেলিভারি ঠিকানা" class="form-control" required></textarea>
+
+    <!-- Payment Terms -->
+    <h2 class="text-xl font-semibold text-gray-700">Payment Terms</h2>
+    <select class="form-control" required>
+        <option value="">পেমেন্ট পদ্ধতি বাছাই করুন</option>
+        <option value="COD">ক্যাশ অন ডেলিভারি</option>
+        <option value="Advance">অগ্রিম</option>
+    </select>
+    <input type="number" placeholder="পেমেন্টের পরিমাণ" class="form-control" required>
+
+    <!-- Special Instructions -->
+    <textarea placeholder="বিশেষ ডেলিভারি নির্দেশ / প্যাকেজিং নির্দেশনা" class="form-control"></textarea>
+
+    <!-- Return Policy -->
+    <textarea placeholder="রিটার্ন/এক্সচেঞ্জ নীতি (যদি থাকে)" class="form-control"></textarea>
+
+    <button type="submit" class="btn btn-primary w-full mt-4">Delivery Confirm</button>
+
+</form>
+
+<div id="successMessage" class="success-message">✅ Order Submission Successful</div>
+
+<!-- Floating WhatsApp Button -->
+<a id="whatsappBtn" href="#" class="floating-whatsapp" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="32" alt="WhatsApp">
+</a>
+
+<script>
+document.getElementById('deliveryForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let message = "📦 নতুন ডেলিভারি রিকোয়েস্ট\n";
+    let inputs = this.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+        if(input.value) message += input.placeholder + ": " + input.value + "\n";
+    });
+
+    let whatsappNumber = "+8801723276453";
+    let whatsappLink = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
+
+    document.getElementById('whatsappBtn').href = whatsappLink;
+    document.getElementById('successMessage').style.display = 'block';
+
+    window.open(whatsappLink, '_blank');
+});
+function doPost(e) {
+  // তোমার শীটের সাথে কানেক্ট
+  var ss = SpreadsheetApp.openById("1uZ9Sg5rtYLMZ_iJKx3UzY0DMHEOLy4GjpnB8xCJVoz4");
+  var sheet = ss.getSheetByName("Sheet1"); // শীটের নাম "Sheet1" হলে
+
+  // ফর্ম থেকে ডাটা নেওয়া
+  var data = JSON.parse(e.postData.contents);
+
+  // শীটে ডাটা যোগ করা
+  sheet.appendRow([
+    data.merchantName,
+    data.merchantAddress,
+    data.merchantPhone,
+    data.productName,
+    data.price,
+    data.deliveryCharge,
+    data.quantity,
+    data.weight,
+    data.packagingType,
+    data.pickupAddress,
+    data.pickupTime,
+    data.customerName,
+    data.customerPhone,
+    data.deliveryAddress,
+    data.paymentMethod,
+    data.paymentAmount,
+    data.specialInstructions,
+    data.returnPolicy,
+    new Date() // অর্ডার সাবমিশনের সময়
+  ]);
+
+  return ContentService.createTextOutput("Success")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+</script>
+
+</body>
+</html>
