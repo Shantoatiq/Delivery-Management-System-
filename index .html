@@ -135,40 +135,6 @@ document.getElementById('deliveryForm').addEventListener('submit', function(e){
 
     window.open(whatsappLink, '_blank');
 });
-function doPost(e) {
-  // তোমার শীটের সাথে কানেক্ট
-  var ss = SpreadsheetApp.openById("1uZ9Sg5rtYLMZ_iJKx3UzY0DMHEOLy4GjpnB8xCJVoz4");
-  var sheet = ss.getSheetByName("Sheet1"); // শীটের নাম "Sheet1" হলে
-
-  // ফর্ম থেকে ডাটা নেওয়া
-  var data = JSON.parse(e.postData.contents);
-
-  // শীটে ডাটা যোগ করা
-  sheet.appendRow([
-    data.merchantName,
-    data.merchantAddress,
-    data.merchantPhone,
-    data.productName,
-    data.price,
-    data.deliveryCharge,
-    data.quantity,
-    data.weight,
-    data.packagingType,
-    data.pickupAddress,
-    data.pickupTime,
-    data.customerName,
-    data.customerPhone,
-    data.deliveryAddress,
-    data.paymentMethod,
-    data.paymentAmount,
-    data.specialInstructions,
-    data.returnPolicy,
-    new Date() // অর্ডার সাবমিশনের সময়
-  ]);
-
-  return ContentService.createTextOutput("Success")
-    .setMimeType(ContentService.MimeType.TEXT);
-}
 </script>
 
 </body>
